@@ -810,13 +810,13 @@ export const ConsultForm = ({ place = "", setPlace = (f) => f }) => {
 
     formJSON.ConsentChecked = isConsentChecked;
 
-    const sendEndpoint = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_SENDORDER}/`;
+    const sendEndpoint = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_CONSULT}/`;
 
     try {
       const response = await fetch(sendEndpoint, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_ORDER}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_CONSULT}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ data: formJSON }),
@@ -825,12 +825,12 @@ export const ConsultForm = ({ place = "", setPlace = (f) => f }) => {
       const result = await response.json();
 
       if (result.error) {
-        console.error("Ошибка при отправке консультации:", result.error);
+        console.error("Ошибка при отправке формы консультации:", result.error);
         setInfoMessage(
           "Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз."
         );
       } else {
-        console.log("Консультация успешно отправлена:", result);
+        console.log("Форма консультации успешно отправлена:", result);
         setInfoMessage("Спасибо! Ваша заявка отправлена!");
         if (formRef.current) formRef.current.reset();
         setIsConsentChecked(false);
@@ -876,7 +876,7 @@ export const ConsultForm = ({ place = "", setPlace = (f) => f }) => {
               />
               <input
                 type="tel"
-                name="Phone"
+                name="tel"
                 placeholder="Введите телефон..."
                 className="p-3 md:p-4 rounded-lg bg-gray-dark text-white font-light placeholder-gray-light border-none focus:outline-none"
                 required
@@ -927,7 +927,7 @@ export const ConsultForm = ({ place = "", setPlace = (f) => f }) => {
 const validateForms = (form, formRef) => {
   const checkArray = Array.from(form);
   const regTel =
-    /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$$/g;
+    /^(\+7|7|8)?[\s\-]?\(?[3-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/g;
 
   for (let data of checkArray) {
     switch (data[0]) {
